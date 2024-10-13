@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Recommendation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f0f8ff;  /* Soft blue background */
+            color: #2c3e50;  /* Darker shade for readability */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow for a modern look */
+            border: 2px solid #3498db; /* Adding a subtle border */
+        }
+
+        h1 {
+            text-align: center;
+            color: #2980b9;  /* Vibrant blue for headers */
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #34495e; /* Soft grey for form labels */
+        }
+
+        select, button {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        select {
+            background-color: #ecf0f1; /* Light grey background for select */
+        }
+
+        button {
+            background-color: #3498db;  /* Strong blue for button */
+            color: #fff;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;  /* Darker blue on hover */
+        }
+
+        .recommendations {
+            margin-top: 20px;
+        }
+
+        .recommendation-item {
+            background: #e9f7ef; /* Light green for course items */
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #2ecc71; /* Green border for course items */
+            font-weight: 500;
+        }
+
+        .recommendation-item:hover {
+            background: #d4efdf;  /* Slightly darker on hover */
+            border-color: #27ae60;
+        }
+    </style>
+    <script>
+        // JavaScript to send a POST request and display recommendations
+        function getRecommendations() {
+            var difficulty = document.getElementById("difficultySelect").value;
+
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `difficulty=${difficulty}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the recommendations
+                var recommendationDiv = document.getElementById("recommendations");
+                recommendationDiv.innerHTML = "<strong>Recommended Courses:</strong><br>";
+                data.forEach(function(course) {
+                    recommendationDiv.innerHTML += `<div class="recommendation-item">${course}</div>`;
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Course Recommendation System</h1>
+        
+        <label for="difficultySelect">Select Difficulty Level:</label>
+        <select id="difficultySelect">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+        </select>
+        <button onclick="getRecommendations()">Get Recommendations</button>
+        
+        <div id="recommendations"></div>
+    </div>
+</body>
+</html>
